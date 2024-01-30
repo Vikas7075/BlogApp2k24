@@ -13,11 +13,6 @@ export const setCookie = (user, res, message, statusCode = 200) => {
     res.status(statusCode).json({
         success: true,
         message,
-        user: {
-            _id: user._id,
-            username: user.username,
-            email: user.email,
-        },
-        token: token
+        user
     });
 };
