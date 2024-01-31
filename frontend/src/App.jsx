@@ -10,7 +10,6 @@ import EditPost from './pages/EditPost';
 import Profile from './pages/Profile';
 function App() {
 
-
   return (
     <div>
       <Router>

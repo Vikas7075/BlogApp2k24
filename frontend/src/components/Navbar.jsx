@@ -1,8 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { BsSearch } from 'react-icons/bs'
+import { FaBars } from 'react-icons/fa'
+import Menu from './Menu';
 
 function Navbar() {
+
+    const [menu, setMenu] = useState(false);
+
+    const showMenu = () => {
+        setMenu(!menu);
+    }
+
     const user = false
     return (
         <div className=' flex items-center justify-between px-6 md:px-[200px] py-4 bg-orange-400'>
@@ -13,9 +22,17 @@ function Navbar() {
                 <input className=' outline-none px-2 md:px-5' type='text' placeholder=' Search a Post.' />
             </div>
 
-            <div className=' flex items-center justify-center space-x-2 md:space-x-4'>
-                {user ? <h3><Link to={'/create'}>Create.</Link></h3> : <h3><Link to={'/login'}>Login</Link></h3>}
-                {user ? <h3><Link to={'/profile'}>Profile</Link></h3> : <h3><Link to={'/register'}>Register</Link></h3>}
+            <div className=' md:flex hidden items-center justify-center space-x-2 md:space-x-4'>
+                {user ? <h3><Link to={'/create'}>CREATE.</Link></h3> : <h3><Link to={'/login'}>LOGIN</Link></h3>}
+                {user ? <div>
+                    <p onClick={showMenu} className='cursor-pointer relative'><FaBars /></p>
+                    {menu && <Menu />}
+
+                </div> : <h3><Link to={'/register'}>REGISTER</Link></h3>}
+            </div>
+            <div onClick={showMenu} className=' md:hidden text-lg hover:text-blue-700'>
+                <p className=' cursor-pointer relative'><FaBars /></p>
+                {menu && <Menu />}
             </div>
         </div>
     )

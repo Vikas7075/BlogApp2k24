@@ -1,6 +1,33 @@
-import React from 'react';
+import { useState } from 'react';
+import axios from 'axios';
+import URL from '../Url'
 
 const Register = () => {
+
+    const [username, setUsername] = useState("")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [error, setError] = useState(false)
+
+    const submitHandler = async (e) => {
+        try {
+            e.preventDefault();
+            const res = await axios.post(`${URL}/api/v1/auth/register`, { username, email, password });
+            console.log(res);
+            setUsername(res.data.username);
+            setEmail(res.data.email);
+            setPassword(res.data.password);
+
+
+        } catch (error) {
+            setError(true)
+            console.error(error);
+        }
+
+    };
+
+
+
     return (
         <div className="py-16">
             <div className="flex bg-white rounded-lg shadow-lg overflow-hidden mx-auto max-w-sm lg:max-w-4xl">
@@ -29,6 +56,7 @@ const Register = () => {
                             Name
                         </label>
                         <input
+                            onChange={(e) => setUsername(e.target.value)}
                             className="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
                             type="text"
                         />
@@ -37,6 +65,7 @@ const Register = () => {
                                 Email Address
                             </label>
                             <input
+                                onChange={(e) => setEmail(e.target.value)}
                                 className="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
                                 type="email"
                             />
@@ -49,6 +78,7 @@ const Register = () => {
 
                             </div>
                             <input
+                                onChange={(e) => setPassword(e.target.value)}
                                 className="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
                                 type="password"
                             />
@@ -83,7 +113,7 @@ const Register = () => {
                             </h1>
                         </a>
                         <div className="mt-8">
-                            <button className="bg-gray-700 text-white font-bold py-2 px-4 w-full rounded hover:bg-gray-600">
+                            <button onClick={submitHandler} className="bg-gray-700 text-white font-bold py-2 px-4 w-full rounded hover:bg-gray-600">
                                 Sign Up
                             </button>
                         </div>
