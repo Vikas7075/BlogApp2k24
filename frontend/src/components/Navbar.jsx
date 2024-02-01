@@ -12,7 +12,7 @@ function Navbar() {
         setMenu(!menu);
     }
 
-    const user = false
+    const user = true
     return (
         <div className=' flex items-center justify-between px-6 md:px-[200px] py-4 bg-orange-400'>
             <h1 className='text-lg md:text-xl font-extrabold'><Link to={'/'}>Bloging World.</Link></h1>
@@ -23,7 +23,7 @@ function Navbar() {
             </div>
 
             <div className=' md:flex hidden items-center justify-center space-x-2 md:space-x-4'>
-                {user ? <h3><Link to={'/create'}>CREATE.</Link></h3> : <h3><Link to={'/login'}>LOGIN</Link></h3>}
+                {user ? <h3><Link to={'/create'}>WRITE</Link></h3> : <h3><Link to={'/login'}>LOGIN</Link></h3>}
                 {user ? <div>
                     <p onClick={showMenu} className='cursor-pointer relative'><FaBars /></p>
                     {menu && <Menu />}

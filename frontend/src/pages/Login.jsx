@@ -1,6 +1,43 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useContext, useState } from 'react';
+import toast from 'react-hot-toast';
+import { Context, server } from '../main';
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
+
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [error, setError] = useState(false);
+
+    const { isAuthenticated, setIsAuthenticated, loading, setLoading } = useContext(Context);
+
+    const navigate = useNavigate();
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            const { data } = await axios.post(`${server}/api/v1/auth/login`, { email, password },
+                {
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    withCredentials: true,
+                });
+            toast.success(data.message);
+            setIsAuthenticated(true);
+            setLoading(false);
+
+
+
+        } catch (error) {
+            toast.error(error.response.data.message)
+            setError(true);
+        }
+    }
+    if (isAuthenticated) return navigate('/');
+
     return (
         <div className="py-16">
             <div className="flex bg-white rounded-lg shadow-lg overflow-hidden mx-auto max-w-sm lg:max-w-4xl">
@@ -56,6 +93,7 @@ const LoginForm = () => {
                             Email Address
                         </label>
                         <input
+                            onChange={(e) => setEmail(e.target.value)}
                             className="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
                             type="email"
                         />
@@ -70,12 +108,13 @@ const LoginForm = () => {
                             </a>
                         </div>
                         <input
+                            onChange={(e) => setPassword(e.target.value)}
                             className="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none"
                             type="password"
                         />
                     </div>
                     <div className="mt-8">
-                        <button className="bg-gray-700 text-white font-bold py-2 px-4 w-full rounded hover:bg-gray-600">
+                        <button onClick={handleLogin} className="bg-gray-700 text-white font-bold py-2 px-4 w-full rounded hover:bg-gray-600">
                             Login
                         </button>
                     </div>

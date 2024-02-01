@@ -1,27 +1,35 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import toast from 'react-hot-toast';
 import axios from 'axios';
-import URL from '../Url'
+import { useNavigate } from 'react-router-dom';
+import { Context, server } from '../main'
 
 const Register = () => {
 
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const [error, setError] = useState(false)
+    const [error, setError] = useState(false);
+    const { isAuthenticated, setIsAuthenticated, loading, setLoading } = useContext(Context);
+
+    const navigate = useNavigate();
 
     const submitHandler = async (e) => {
+        e.preventDefault();
         try {
-            e.preventDefault();
-            const res = await axios.post(`${URL}/api/v1/auth/register`, { username, email, password });
-            console.log(res);
-            setUsername(res.data.username);
-            setEmail(res.data.email);
-            setPassword(res.data.password);
-
+            const { data } = await axios.post(`${server}/api/v1/auth/register`, {
+                username, email, password
+            });
+            console.log(data.message);
+            toast.success(data.message);
+            setIsAuthenticated(true);
+            navigate("/")
 
         } catch (error) {
-            setError(true)
-            console.error(error);
+            toast.error(error.response.data.message)
+            console.log(error.response.data.message);
+            setIsAuthenticated(false);
+
         }
 
     };
