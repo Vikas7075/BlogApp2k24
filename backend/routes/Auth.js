@@ -71,7 +71,7 @@ router.post('/login', async (req, res) => {
 });
 
 //LogOut
-router.post('/logout', (req, res) => {
+router.post('/logout', async (req, res) => {
     try {
         // Clear the JWT cookie
         res.clearCookie('token');
@@ -90,7 +90,7 @@ router.post('/logout', (req, res) => {
 });
 
 
-router.get('/profile', verifyToken, (req, res) => {
+router.get('/profile', verifyToken, async (req, res) => {
     // Access the user information using req.user
     const user = req.user;
 

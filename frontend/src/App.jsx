@@ -8,8 +8,32 @@ import PostDetails from './pages/PostDetails';
 import CreatePost from './pages/CreatePost';
 import EditPost from './pages/EditPost';
 import Profile from './pages/Profile';
-import { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
+import { useContext, useEffect } from 'react';
+import { Context, server } from './main';
+import axios from 'axios';
 function App() {
+
+  const { setUser, setIsAuthenticated, setLoading } = useContext(Context);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const { data } = await axios.get(`${server}/api/v1/auth/profile`, { withCredentials: true });
+        setUser(data.data);
+        toast.success(data.message);
+        setIsAuthenticated(true);
+      } catch (error) {
+        toast.error(error.response.data.message);
+        setIsAuthenticated(false);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+
+  }, []);
 
   return (
     <div>

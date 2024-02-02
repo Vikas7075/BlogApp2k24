@@ -1,6 +1,9 @@
 import React from 'react';
 
-const HomePost = () => {
+const HomePost = ({ post }) => {
+    if (!post) {
+        return <div>No data available</div>;
+    }
     return (
         <div className="full-h-screen flex flex-col p-4 sm:p-1 md:p-8 m-0 justify-center">
             {/* Themes: blue, purple and teal */}
