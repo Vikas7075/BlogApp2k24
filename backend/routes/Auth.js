@@ -91,15 +91,20 @@ router.post('/logout', async (req, res) => {
 
 
 router.get('/profile', verifyToken, async (req, res) => {
-    // Access the user information using req.user
-    const user = req.user;
+    try {
+        const user = req.user;
 
-    if (user && user.username) {
-        res.json({
-            success: true,
-            message: `Welcome back ${user.username}`,
-        });
-    } else {
+        if (user && user.username) {
+            setCookie(user, res, `Welcome back ${user.username}`, 200);
+            res.json({
+                success: true,
+                message: `Welcome back ${user.username}`,
+            });
+        } else {
+            throw new Error('Unauthorized: Missing username information');
+        }
+    } catch (error) {
+        console.log(error);
         res.status(401).json({
             success: false,
             message: 'Unauthorized: Missing username information',

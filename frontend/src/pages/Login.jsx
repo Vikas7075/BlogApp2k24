@@ -9,8 +9,9 @@ const LoginForm = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [error, setError] = useState(false);
+    const [Loding, setLoading] = useState(false);
 
-    const { isAuthenticated, setIsAuthenticated, loading, setLoading } = useContext(Context);
+    const { isAuthenticated, setIsAuthenticated } = useContext(Context);
 
     const navigate = useNavigate();
 

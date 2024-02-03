@@ -20,7 +20,12 @@ function App() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const { data } = await axios.get(`${server}/api/v1/auth/profile`, { withCredentials: true });
+        const { data } = await axios.get(`${server}/api/v1/auth/profile`, {
+          headers: {
+            "Content-Type": "application/json"
+          },
+          withCredentials: true,
+        });
         setUser(data.data);
         toast.success(data.message);
         setIsAuthenticated(true);

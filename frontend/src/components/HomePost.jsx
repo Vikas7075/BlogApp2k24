@@ -1,9 +1,24 @@
 import React from 'react';
 
-const HomePost = ({ post }) => {
-    if (!post) {
-        return <div>No data available</div>;
-    }
+const HomePost = ({ title, desc, image, username, updateAt }) => {
+
+    const formatTimestamp = (updateAt) => {
+        try {
+            const date = new Date(updateAt);
+            if (isNaN(date)) {
+                throw new Error("Invalid date");
+            }
+
+            const options = { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true };
+            return new Intl.DateTimeFormat('en-US', options).format(date);
+        } catch (error) {
+            console.error("Error formatting timestamp:", error);
+            return "Invalid Date";
+        }
+    };
+
+
+
     return (
         <div className="full-h-screen flex flex-col p-4 sm:p-1 md:p-8 m-0 justify-center">
             {/* Themes: blue, purple and teal */}
@@ -17,10 +32,10 @@ const HomePost = ({ post }) => {
                                     <div className="h-full">
                                         <img
                                             className="h-full object-cover"
-                                            src="https://inviqa.com/sites/default/files/styles/pullout/public/2020-08/XD-1.jpeg?h=f75d236a&itok=PBoXPDmW"
+                                            src={image}
                                             width="733"
                                             height="412"
-                                            alt=""
+                                            alt="img"
                                         />
                                     </div>
                                 </article>
@@ -29,27 +44,22 @@ const HomePost = ({ post }) => {
                         <div className="p-6 bg-grey">
                             <div className="leading-relaxed">
                                 <h2 className="leading-tight text-4xl font-bold">
-                                    CXcon: Experience Transformation
+                                    {title}
                                 </h2>
+                                <div className="flex mt-2 justify-between">
+                                    <p className="text-gray-500 mr-4">@{username}</p>
+                                    <p className="text-gray-500">{formatTimestamp(updateAt)}</p>
+                                </div>
                                 <p className="mt-4">
-                                    Our second CXcon in October was dedicated to experience
-                                    transformation. The free one-day virtual event brought together
-                                    230+ heads of digital, thought leaders, and UX practitioners to
-                                    discuss all aspects of experience design.
+                                    {desc && desc.length > 300 ? `${desc.slice(0, 300)}   >>>Read More...` : desc}
                                 </p>
-                                <p className="mt-4">
+
+                                {/* <p className="mt-4">
                                     In a jam-packed day filled with keynote sessions, panels, and
                                     virtual networking we explored topics including design leadership,
                                     UX ethics, designing for emotion and innovation at scale.
-                                </p>
-                                <p>
-                                    <a
-                                        className="mt-4 button button--secondary"
-                                        href="https://inviqa.com/cxcon-experience-transformation"
-                                    >
-                                        Explore this event
-                                    </a>
-                                </p>
+                                </p> */}
+
                             </div>
                         </div>
                     </div>

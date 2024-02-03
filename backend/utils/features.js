@@ -6,7 +6,7 @@ export const setCookie = (user, res, message, statusCode = 200) => {
     // Set the cookie in the response
     res.cookie("token", token, {
         httpOnly: true,
-        maxAge: 15 * 60 * 1000,
+        maxAge: 55 * 60 * 1000,
         sameSite: process.env.NODE_ENV === "Development" ? "lax" : "none",
         secure: process.env.NODE_ENV === "Development" ? false : true,
 

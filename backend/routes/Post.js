@@ -92,12 +92,11 @@ router.get('/:id', verifyToken, async (req, res) => {
 
 router.get('/', async (req, res) => {
     const query = req.query;
-    console.log(query);
     try {
         const searchFilter = {
             title: { $regex: query.search, $options: "i" }
         }
-        const posts = await Post.find(query.search ? searchFilter : null)
+        const posts = await Post.find(query.search ? searchFilter : {})
 
         setCookie(posts, res, "Get All Posts", 200);
 
