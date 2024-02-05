@@ -7,26 +7,25 @@ import authRoutes from './routes/Auth.js';
 import userRoutes from './routes/User.js';
 import postRoutes from './routes/Post.js';
 import commentRoutes from './routes/Comment.js';
+import { verifyToken } from './utils/VerifyToken.js';
 
+
+
+dotenv.config();
 
 const app = express();
 app.use(cookieParser());
-
-app.get('/', (req, res) => {
-    res.json({
-        success: true,
-        message: 'Home Page ....',
-    });
-});
-
-dotenv.config();
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+app.use(cors({
+    origin: "http://localhost:5173",
+    methods: ["POST", "PUT", "GET", "DELETE"],
+    credentials: true
+}));
 
 app.use('/api/v1/auth', authRoutes);
-app.use('/api/v1/user', userRoutes);
-app.use('/api/v1/post', postRoutes);
-app.use('/api/v1/comments', commentRoutes);
+app.use('/api/v1/user', verifyToken, userRoutes);
+app.use('/api/v1/post', verifyToken, postRoutes);
+app.use('/api/v1/comments', verifyToken, commentRoutes);
 
 
 app.listen(process.env.PORT, () => {

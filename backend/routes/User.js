@@ -4,14 +4,13 @@ import User from '../model/user.js';
 import Post from '../model/Post.js';
 import Comment from '../model/Comment.js';
 import { setCookie } from '../utils/features.js';
-import { verifyToken } from '../utils/VerifyToken.js';
 
 const router = express.Router()
 
 
 //Upadate
 // Update User Email and Password
-router.put('/:id', verifyToken, async (req, res) => {
+router.put('/:id', async (req, res) => {
     try {
         const userId = req.params.id;
         const { email, password, username } = req.body;
@@ -46,7 +45,7 @@ router.put('/:id', verifyToken, async (req, res) => {
 
 //Delete
 
-router.delete('/:id', verifyToken, async (req, res) => {
+router.delete('/:id', async (req, res) => {
     try {
         const userId = req.params.id;
 

@@ -3,6 +3,8 @@ import Post from '../model/Post.js';
 import { setCookie } from '../utils/features.js';
 import { set } from 'mongoose';
 import { verifyToken } from '../utils/VerifyToken.js';
+import { upload } from '../utils/multer.js';
+import { uploadOnCloudinary } from '../utils/cloudinary.js';
 
 
 const router = express.Router();
@@ -10,24 +12,37 @@ const router = express.Router();
 
 // create
 
-router.post('/create', verifyToken, async (req, res) => {
+router.post('/create', verifyToken, upload.single('photo'), async (req, res) => {
+    console.log('Request Body:', req.body);
+    console.log('Request File:', req.file);
 
     try {
-        const newPost = new Post(req.body);
+        // Assuming 'photo' is the field name in your form for file upload
+        const newPostData = {
+            title: req.body.title,
+            desc: req.body.desc,
+            username: req.body.username,
+            userId: req.body.userId,
+            categories: JSON.parse(req.body.categories),
+            imagePath: req.file ? req.file.path : undefined,
+        };
+
+        const newPost = new Post(newPostData);
         const savedPost = await newPost.save();
+
+        const cloudinaryResponse = await uploadOnCloudinary(req.file.path);
+        console.log(cloudinaryResponse);
 
         setCookie(savedPost, res, "Post Created Successfully...", 200);
     } catch (error) {
-
-        console.error('Error during post created :', error);
+        console.error('Error during post creation:', error);
         res.status(500).json({
             success: false,
             message: 'Internal Server Error.',
         });
     }
-
-
 });
+
 
 
 //Upadate
